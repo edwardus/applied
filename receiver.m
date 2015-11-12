@@ -1,2 +1,4 @@
 %% Receiver
-%%
+%% Inverse OFDM
+
+r= 
