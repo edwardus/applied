@@ -1,1 +1,2 @@
-% Channel file
+%% Channel
+%%

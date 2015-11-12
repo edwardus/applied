@@ -1,1 +1,2 @@
-%Receiver file
+%% Receiver
+%%
