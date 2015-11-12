@@ -1,8 +1,8 @@
 # applied
 Applied Signal Processing
 
-How to: 
 
+<<<<<<< HEAD
 # Git commands:
 *   git status: check the status of the repository
 *   git add/rm: stage changes to commit
@@ -14,3 +14,8 @@ How to:
 *   git log: show commit logs
 
 Lets try
+=======
+testing
+
+pontus hej hej
+>>>>>>> a8b73812c787ca86a66eb665cbc92bbefc1173f9
