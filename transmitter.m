@@ -22,6 +22,7 @@ Prefix = OFDM(end-L+1:end); %Cyclic prefix: Gimics a infinite time-signal
                             %and works as a guard intervall.
 z = [Prefix;OFDM]; % adds the prefix to the signal.
 
+z =real(z);
 
 end
 
