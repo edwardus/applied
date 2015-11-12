@@ -5,7 +5,7 @@ Applied Signal Processing
 <<<<<<< HEAD
 # Git commands:
 *   git status: check the status of the repository
-*   git add/rm: stage changes to commit
+*   git add: stage changes to commit
 *   git commit -m "message": commit staged changes
 *   git push: push commit to the remote repository
 *   git pull: fetch from and integrate with another repository or a local branch
