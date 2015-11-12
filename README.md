@@ -2,7 +2,6 @@
 Applied Signal Processing
 
 
-<<<<<<< HEAD
 # Git commands:
 *   git status: check the status of the repository
 *   git add: stage changes to commit
@@ -13,9 +12,3 @@ Applied Signal Processing
 *   git reset (file): unstage file (pass from ready to local change)
 *   git log: show commit logs
 
-Lets try
-=======
-testing
-
-pontus hej hej
->>>>>>> a8b73812c787ca86a66eb665cbc92bbefc1173f9
