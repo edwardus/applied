@@ -19,3 +19,4 @@ codeword = bi2de(GroupBits,'left-msb')+1; %Assign each "group" to a decimal
 out = [];
 
 end
+
