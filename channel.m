@@ -5,7 +5,7 @@ sigma=0; %Noise level
 
     if mode==1
        
-      h=zeros(1,128);
+      h=zeros(1,60);
         for i = 1:60
             h(i)=0.8.^i;
         end
@@ -14,14 +14,13 @@ sigma=0; %Noise level
 
     if mode==2
       
-       h=zeros(1,128);
+       h=zeros(1,9);
        
        h(1) = 0.5;
        h(9) = 0.5;
        
-        
-        
     end
+    
 y_len = length(z)+length(h)-1;
 
 
