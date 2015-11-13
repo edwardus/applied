@@ -1,7 +1,7 @@
-function y = channel(z,mode)
+function y_hat = channel(z,mode)
 
 %% Filter through channel impulse response and add noise
-sigma=1; %Noise level
+sigma=0; %Noise level
 
     if mode==1
        
@@ -27,7 +27,7 @@ y_len = length(z)+length(h)-1;
 
 w = 1/sqrt(2)*sigma*(randn(y_len,1) + 1i*randn(y_len,1)); %Additive noise
 
-y=conv(z,h)+w;
+y_hat=conv(z,h)+w;
 
 
 end
