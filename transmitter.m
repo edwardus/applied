@@ -1,10 +1,10 @@
-function z = transmitter()
+function [z,OFDM] = transmitter()
 %Transmitter file
 
 %% Parameters
 N = 128;
 m= 2;
-L=128; %Length of the cyclic prefix
+M=128; %Length of the cyclic prefix
 QPSK = [1+1i; 1-1i; -1+1i; -1-1i]./sqrt(2);
 
 %% Script
@@ -18,7 +18,7 @@ symbols = QPSK(codeword); %Each number is assigned to our constellation.
 
 OFDM = ifft(symbols,N); %We apply inverse-fft on our symbols (OFDM).
 
-Prefix = OFDM(end-L+1:end); %Cyclic prefix: Gimics a infinite time-signal
+Prefix = OFDM(end-M+1:end); %Cyclic prefix: Gimics a infinite time-signal
                             %and works as a guard intervall.
 z = [Prefix;OFDM]; % adds the prefix to the signal.
 

@@ -1,4 +1,4 @@
-function y_hat = channel(z,mode)
+function [y_hat,h] = channel(z,mode)
 
 %% Filter through channel impulse response and add noise
 sigma=0; %Noise level
