@@ -1,5 +1,6 @@
 
 %% Test File
+N=128;
 [z,ofdm,bits]=transmitter();
 
 
@@ -10,8 +11,13 @@
 
 b_hat = receiver(y_hat,h,y_len);
 
-
-
+BitErrors = 0;
+for i=1:2*N
+    if bits(i)~=b_hat(i)
+        BitErrors=BitErrors+1;
+    end
+end
+BitErrors
 
 %%
 figure(1)
