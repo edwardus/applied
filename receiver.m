@@ -1,23 +1,33 @@
-function y = receiver(y_hat,h)
+function y = receiver(y_hat,h,y_len)
 
 %% Parameters
 m=2;
 N=128;
-M=60; %Make sure we use the same L in transmitter and receiver
-
+M=length(h); %Make sure we use the same M in transmitter and receiver
 
 
 %% Processing
-y_hat = y_hat(M+1:end); % removal of the cyclic prefix
-y_hat = y_hat(1:end-M+1);
+y_hat = y_hat(M:M+N-1);
 
-h_hat = fft(h,N);
+%y_hat = y_hat(M+1:end); % removal of the cyclic prefix
+%y_hat = y_hat(1:end-M+1);
 
-y_hat=fft(y_hat,N);
 
-x=ifft(y_hat./h_hat',N);
 
-y=x';
+y_hat=fft(y_hat);
+
+H=fft(h,N);
+H=conj(H);
+
+y=H'.*y_hat;
+
+y=y./10;
+
+%%
+
+%x=ifft(y_hat./h_hat',N);
+
+%y=x';
 
 % y=fft(y,N);
 % 

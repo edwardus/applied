@@ -2,11 +2,11 @@
 %% Test File
 [z,ofdm,GroupBits]=transmitter();
 
-[y_hat,h] = channel(z,1);
+[y_hat,h,y_len] = channel(z,1);
 
 
 
-y = receiver(y_hat,h);
+y = receiver(y_hat,h,y_len);
 
 
 
