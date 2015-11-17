@@ -7,7 +7,7 @@ sigma=0; %Noise level
        
       h=zeros(1,60); 
         for i = 1:60
-            h(i)=0.8.^i;
+            h(i)=0.8.^(i-1);
         end
         
      end
@@ -17,16 +17,14 @@ sigma=0; %Noise level
        h=zeros(1,9);
        
        h(1) = 0.5;
-       h(9) = 0.5;
-       
+       h(9) = 0.5; 
     end
-    
 y_len = length(z)+length(h)-1;
 
 
 w = 1/sqrt(2)*sigma*(randn(y_len,1) + 1i*randn(y_len,1)); %Additive noise
-
 y_hat=conv(z,h)+w;
-
-
+zl=length(z)
+hl=length(h)
+y_hatl=length(y_hat)
 end
