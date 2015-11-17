@@ -1,5 +1,5 @@
-# applied
-Applied Signal Processing
+# Applied Signal Processing
+A commnication based project focusing on the fundamental signal analysis algorithms. 
 
 
 # Git commands:
