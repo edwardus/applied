@@ -17,10 +17,7 @@ sigma=0; %Noise level
        h=zeros(1,9);
        
        h(1) = 0.5;
-       h(9) = 0.5;
-       
-        
-        
+       h(9) = 0.5; 
     end
 y_len = length(z)+length(h)-1;
 
@@ -30,5 +27,4 @@ y_hat=conv(z,h)+w;
 zl=length(z)
 hl=length(h)
 y_hatl=length(y_hat)
-
 end
