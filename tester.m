@@ -1,23 +1,25 @@
 
 %% Test File
 N=128;
+
 [z,ofdm,bits,symbols]=transmitter();
 
+[y_hat,h,sigma] = channel(z,1);
 
-[y_hat,h,y_len] = channel(z,1);
-
-
-
-
-[b_hat,s_hat] = receiver(y_hat,h,y_len);
-s_max=max(abs(symbols-s_hat))
+[b_hat,s_hat] = receiver(y_hat,h);
+s_max=max(abs(symbols-s_hat)); %This is a good measure, should be included 
+                              %the report imo 
 BitErrors = 0;
 for i=1:2*N
     if bits(i)~=b_hat(i)
         BitErrors=BitErrors+1;
     end
 end
-BitErrors
+
+
+disp(['The total number of bit errors are: ' int2str(BitErrors) char(10)...
+    'The current noise level is: ' num2str(sigma) 'dB' char(10)...
+    'And the maximum differance between transmitted and received symbol is: ' num2str(s_max) char(10)])
 
 %%
 figure(1)

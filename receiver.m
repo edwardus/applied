@@ -1,4 +1,4 @@
-function [b_hat,s_hat] = receiver(y_hat,h,y_len)
+function [b_hat,s_hat] = receiver(y_hat,h)
 
 %% Parameters
 m=2;
@@ -7,15 +7,13 @@ M=length(h); %Make sure we use the same M in transmitter and receiver
 
 
 %% Processing
-%y_hat = y_hat((M+1):end); % removal of the cyclic prefix
-y_hat = y_hat(M+1:M+N);
 
+y_hat = y_hat(M+1:M+N); % removal of the cyclic prefix
 
-%y_hat = y_hat(1:(end-(M-1)));
-
-H = fft(h,N);
+H = fft(h,N); % The transfer function H(w)
 
 r=fft(y_hat);
+
 figure(3)
 plot(real(r))
 title('fft of received signal')
