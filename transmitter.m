@@ -1,4 +1,4 @@
-function [z,OFDM,bits] = transmitter()
+function [z,OFDM,bits,symbols] = transmitter()
 
 %Transmitter file
 
@@ -25,9 +25,10 @@ Prefix = OFDM((end-M+1):end); %Cyclic prefix: Gimics a infinite time-signal
 
 z = [Prefix;OFDM]; % adds the prefix to the signal.
 
-z =real(z);
-z= z./max(z);
-
-
+%z =real(z);
+% z= z./max(z);
+figure(1)
+plot(real(z))
+title('Transmitted signal')
 end
 

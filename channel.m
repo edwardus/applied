@@ -23,8 +23,12 @@ y_len = length(z)+length(h)-1;
 
 
 w = 1/sqrt(2)*sigma*(randn(y_len,1) + 1i*randn(y_len,1)); %Additive noise
+
+
 y_hat=conv(z,h)+w;
-zl=length(z)
-hl=length(h)
-y_hatl=length(y_hat)
+
+
+figure(2)
+plot(real(y_hat))
+title('Transmitted signal passed through h')
 end

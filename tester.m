@@ -1,7 +1,7 @@
 
 %% Test File
 N=128;
-[z,ofdm,bits]=transmitter();
+[z,ofdm,bits,symbols]=transmitter();
 
 
 [y_hat,h,y_len] = channel(z,1);
@@ -9,8 +9,8 @@ N=128;
 
 
 
-b_hat = receiver(y_hat,h,y_len);
-
+[b_hat,s_hat] = receiver(y_hat,h,y_len);
+s_max=max(abs(symbols-s_hat))
 BitErrors = 0;
 for i=1:2*N
     if bits(i)~=b_hat(i)
