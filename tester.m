@@ -3,14 +3,14 @@
 ErrorsPerSigma = zeros(1,1001);
 s_maxTOT=zeros(1,1001);
 counter = 0;
-for sigma=0:0.001:1
-N=128;
+N=256;
 counter = counter +1; 
+sigma=0
 [z,ofdm,bits,symbols]=transmitter();
 
 [y_hat,h,sigma2] = channel(z,2,sigma);
 
-[b_hat,s_hat] = receiver(y_hat,h);
+[b_hat,s_hat,H] = receiver(y_hat,h);
 % s_max=max(abs(symbols-s_hat)); %This is a good measure, should be included 
                                %the report imo 
 
@@ -22,9 +22,9 @@ for i=1:2*N
         BitErrors=BitErrors+1;
     end
 end
+errorbits=abs(bits-b_hat)
 ErrorsPerSigma(counter) = BitErrors;
 s_maxTOT(counter)=s_max;
-end
 sigma = 0:0.001:1;
 % subplot(2,1,1)
 plot(sigma,ErrorsPerSigma)
