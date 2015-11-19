@@ -20,15 +20,10 @@ r_t=fft(y_hat_t);
 H = fft(h,N); % The transfer function H(w)
 H_estimated=r_t/symbols_t;
 
+r=fft(y_hat,N);
 
-figure(3)
-plot(real(r))
-title('fft of received signal')
+s_hat=r./(conj(H))';
 
-s_hat=r./(conj(H)'-0.001);
-figure(4)
-plot(real(s_hat))
-title('estimated y signal')
 b_hat=zeros(1,2*N);
 plot(H)
     for n=1:N
