@@ -3,7 +3,7 @@
 ErrorsPerSigma = zeros(1,1001);
 s_maxTOT=zeros(1,1001);
 counter = 0;
-N=256;
+N=128;
 counter = counter +1; 
 sigma=0
 [z,ofdm,bits,symbols]=transmitter();
