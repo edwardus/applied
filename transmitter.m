@@ -1,4 +1,4 @@
-function [z,OFDM,bits,symbols] = transmitter()
+function [z,bits,symbols] = transmitter()
 
 %Transmitter file
 
@@ -16,9 +16,9 @@ GroupBits = buffer(bits,m)'; %Here we group the bits 2 and 2.
 codeword = bi2de(GroupBits,'left-msb')+1; %Assign each "group" to a decimal.
 
 symbols = QPSK(codeword); %Each number is assigned to our constellation.
-pilot= QPSK([1:4]);
-symbols = [pilot;symbols];
 
+pilot= QPSK([1:4]);
+% symbols = [pilot;symbols];
 OFDM = ifft(symbols); %We apply inverse-fft on our symbols (OFDM).
 
 Prefix = OFDM((end-M+1):end); %Cyclic prefix: Gimics a infinite time-signal
