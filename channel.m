@@ -22,12 +22,9 @@ sigma; %Noise level
     
 y_len = length(z)+length(h)-1;
 
-
 w = 1/sqrt(2)*sigma*(randn(y_len,1) + 1i*randn(y_len,1)); %Additive noise
 
-
 y_hat=conv(z,h)+w;
-
 
 % figure(2)
 % plot(real(y_hat))

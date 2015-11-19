@@ -11,7 +11,7 @@ counter = counter +1;
 [y_hat,h,sigma2] = channel(z,2,sigma);
 
 [b_hat,s_hat] = receiver(y_hat,h);
-s_max=max(abs(symbols-s_hat)); %This is a good measure, should be included 
+% s_max=max(abs(symbols-s_hat)); %This is a good measure, should be included 
                                %the report imo 
 
 %scatterplot(s_hat)

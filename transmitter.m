@@ -15,14 +15,15 @@ GroupBits = buffer(bits,m)'; %Here we group the bits 2 and 2.
 
 codeword = bi2de(GroupBits,'left-msb')+1; %Assign each "group" to a decimal.
 
-symbols = QPSK(codeword); %Each number is assigned to our constellation.
-
+symbols = QPSK(codeword) %Each number is assigned to our constellation.
+symbols_t= QPSK([[1:4],[1:4],[1:4],[1:4],[1:4],[1:4],[1:4],[1:4],[1:4],[1:4],[1:4],[1:4],[1:4],[1:4],[1:4]]);
+symbols = [symbols_t;symbols]
 
 OFDM = ifft(symbols); %We apply inverse-fft on our symbols (OFDM).
 
 Prefix = OFDM((end-M+1):end); %Cyclic prefix: Gimics a infinite time-signal
                               %and works as a guard intervall.
-
+                              
 z = [Prefix;OFDM]; % adds the prefix to the signal.
 
 % figure(1)
