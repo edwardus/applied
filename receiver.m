@@ -12,17 +12,12 @@ y_hat = y_hat(M+1:M+N); % removal of the cyclic prefix
 
 H = fft(h,N); % The transfer function H(w)
 
-r=fft(y_hat);
+r=fft(y_hat,N);
 
-figure(3)
-plot(real(r))
-title('fft of received signal')
+s_hat=r./(conj(H))';
 
-s_hat=r./conj(H)';
 
-figure(4)
-plot(real(s_hat))
-title('estimated y signal')
+
 b_hat=zeros(1,2*N);
 
     for n=1:N

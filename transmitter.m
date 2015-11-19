@@ -5,7 +5,7 @@ function [z,OFDM,bits,symbols] = transmitter()
 %% Parameters
 N = 128;
 m= 2;
-M=60; %Length of the cyclic prefix, i.e length of h
+M=9; %Length of the cyclic prefix, i.e length of h
 QPSK = [-1-1i; -1+1i; 1-1i; 1+1i]./sqrt(2);
 
 %% Script
@@ -25,8 +25,8 @@ Prefix = OFDM((end-M+1):end); %Cyclic prefix: Gimics a infinite time-signal
 
 z = [Prefix;OFDM]; % adds the prefix to the signal.
 
-figure(1)
-plot(real(z))
-title('Transmitted signal')
+% figure(1)
+% plot(real(z))
+% title('Transmitted signal')
 end
 
