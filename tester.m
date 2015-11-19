@@ -2,11 +2,11 @@
 %% Test File
 N=128;
 
-[z,ofdm,bits,symbols]=transmitter();
+[z,z_t,ofdm,bits,symbols]=transmitter();
 
-[y_hat,h,sigma] = channel(z,1);
+[y_hat,y_hat_t,h,sigma] = channel(z,z_t,2);
 
-[b_hat,s_hat] = receiver(y_hat,h);
+[b_hat,s_hat] = receiver(y_hat,y_hat_t,h);
 s_max=max(abs(symbols-s_hat)); %This is a good measure, should be included 
                               %the report imo 
 BitErrors = 0;
