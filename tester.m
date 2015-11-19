@@ -1,16 +1,22 @@
 
 %% Test File
+
+%Parameters
 ErrorsPerSigma = zeros(1,1001);
 s_maxTOT=zeros(1,1001);
 counter = 0;
+N=128;
 
-N=256;
+sigma=0;
+
+%Test area
+
 counter = counter +1; 
-sigma=0
-[z,ofdm,bits,symbols]=transmitter();
 
 
-[y_hat,h,sigma2] = channel(z,2,sigma);
+[z,bits,symbols]=transmitter();
+
+[y_hat,h,sigma2] = channel(z,1,sigma);
 
 [b_hat,s_hat,H] = receiver(y_hat,h);
 % s_max=max(abs(symbols-s_hat)); %This is a good measure, should be included 
@@ -24,10 +30,10 @@ for i=1:2*N
         BitErrors=BitErrors+1;
     end
 end
-errorbits=abs(bits-b_hat)
+%errorbits=abs(bits-b_hat)
 ErrorsPerSigma(counter) = BitErrors;
 s_maxTOT(counter)=s_max;
-
+%%
 sigma = 0:0.001:1;
 % subplot(2,1,1)
 plot(sigma,ErrorsPerSigma)
