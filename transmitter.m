@@ -1,4 +1,4 @@
-function [z,OFDM,bits,symbols] = transmitter()
+function [z,bits,symbols] = transmitter()
 
 %Transmitter file
 
