@@ -28,7 +28,9 @@ GroupBits = buffer(bits,m)'; %Here we group the bits 2 and 2.
 codeword = bi2de(GroupBits,'left-msb')+1; %Assign each "group" to a decimal.
 
 symbols = QPSK(codeword); %Each number is assigned to our constellation.
-
+figure(5)
+scatterplot(symbols)
+title('Scatterplot of transmitted symbols')
 if fall == 3
 OFDM_p=ifft(s_pilot);
 Prefix_s=OFDM_p;
@@ -42,7 +44,7 @@ Prefix = OFDM((end-M+1):end); %Cyclic prefix: Gimics a infinite time-signal
                               %and works as a guard intervall.
                               
 z = [Prefix;OFDM]; % adds the prefix to the signal.
-length(z)
+
 % figure(1)
 % plot(real(z))
 % title('Transmitted signal')

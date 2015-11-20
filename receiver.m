@@ -22,7 +22,14 @@ r=fft(y_hat);
 
 H = fft(h,N); % The transfer function H(w)
 
+% scatterplot(r)
+% title('Scatterplot of r - i.e s affected by the channel')
+
 s_hat=r./(conj(H))';
+
+
+% scatterplot(s_hat)
+% title('Scatterplot of received symbols - noisy')
 
 b_hat=zeros(1,2*N);
     for n=1:N
@@ -54,17 +61,17 @@ H_estimated  = r_p./s_pilot;
 
 s_hat=r./(H_estimated);
 
+
+
 % H_estimated=zeros(N,1);
 % 
 % for i=1:8
 %     H_estimated([(i-1)*16+1:(i-1)*16+16])=r([(i-1)*16+1:(i-1)*16+16])./pilot;
 %     pilot=r([(i)*16+1:(i)*16+16])./H_estimated([(i-1)*16+1:(i-1)*16+16]);
 % end
-figure(3)
-freqz(H_estimated)
-
-
-
+% figure(3)
+% freqz(H_estimated)
+% title('Estimated H_1(w) - noisy channel')
 
 b_hat=zeros(1,2*N);
 
