@@ -1,4 +1,4 @@
-function [b_hat,s_hat] = receiver(y_hat,h,fall)
+function [b_hat,s_hat] = receiver(y_hat,y_hat_p,h,fall)
 %% Parameters
 m=2;
 N=128;
@@ -36,28 +36,34 @@ end
 
 if known ==0
 %% Parameters
-
+h=0;
 QPSK = [-1-1i; -1+1i; 1-1i; 1+1i]./sqrt(2);
 
-pilot= QPSK(repmat([1:4],1,4));
-z_len= (N + 16)*2
-M=length(y_hat)-z_len+1
+s_pilot = QPSK(repmat([1:4],1,32));
+z_len= (N)*2;
+M=length(y_hat)-z_len+1;
 %% Processing
-y_hat = y_hat(M+1:M+N+16) % removal of the cyclic prefix
+y_hat = y_hat(M+1:M+N); % removal of the cyclic prefix
+y_hat_p = y_hat_p(M+1:M+N);
 
 r=fft(y_hat);
-% r_t=r(1:16);
-% r=r(16+1:end);
+r_p=fft(y_hat_p);
 
-H_estimated=zeros(1,N);
 
-for i=1:8
-    H_estimated([(i-1)*16+1:(i-1)*16+16])=r([(i-1)*16+1:(i-1)*16+16])./pilot;
-    pilot=r([(i)*16+1:(i)*16+16])./H_estimated([(i-1)*16+1:(i-1)*16+16]);
-end
+H_estimated  = r_p./s_pilot;
+
+s_hat=r./(H_estimated);
+
+% H_estimated=zeros(N,1);
+% 
+% for i=1:8
+%     H_estimated([(i-1)*16+1:(i-1)*16+16])=r([(i-1)*16+1:(i-1)*16+16])./pilot;
+%     pilot=r([(i)*16+1:(i)*16+16])./H_estimated([(i-1)*16+1:(i-1)*16+16]);
+% end
 figure(3)
 freqz(H_estimated)
-s_hat=r./(conj(H_estimated))';
+
+
 
 
 b_hat=zeros(1,2*N);
