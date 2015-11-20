@@ -28,9 +28,9 @@ GroupBits = buffer(bits,m)'; %Here we group the bits 2 and 2.
 codeword = bi2de(GroupBits,'left-msb')+1; %Assign each "group" to a decimal.
 
 symbols = QPSK(codeword); %Each number is assigned to our constellation.
-figure(5)
-scatterplot(symbols)
-title('Scatterplot of transmitted symbols')
+% figure(5)
+% scatterplot(symbols)
+% title('Scatterplot of transmitted symbols')
 if fall == 3
 OFDM_p=ifft(s_pilot);
 Prefix_s=OFDM_p;

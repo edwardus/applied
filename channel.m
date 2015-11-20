@@ -2,9 +2,10 @@ function [y_hat,y_hat_p,h,sigma] = channel(z,z_p,mode,sigma)
 
 %% Filter through channel impulse response and add noise
 
-sigma; %Noise level
-N=130;
-synch=2; %number of bits off-synch
+sigma = 0.02; %Noise level
+
+synch=0; %number of bits off-synch
+N=128 + synch;
 
 y_hat_p=[];
     if mode==1
@@ -33,9 +34,9 @@ y_hat=conv(z,h)+w;
 if length(z_p)>1;
     y_hat_p=conv(z_p,h)+w2;
 end
-% figure(1)
-% freqz(fft(h,N))
-% title('Actual H_1(w)')
+figure(1)
+freqz(fft(h,N))
+title('Actual H_2(w)')
 % figure(2)
 % plot(real(y_hat))
 % title('Transmitted signal passed through h')

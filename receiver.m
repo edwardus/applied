@@ -20,7 +20,6 @@ y_hat = y_hat(M+1:M+N); % removal of the cyclic prefix and delay
 r=fft(y_hat);
 
 H = fft(h,N); % The transfer function H(w)
-
 % scatterplot(r)
 % title('Scatterplot of r - i.e s affected by the channel')
 
@@ -58,8 +57,11 @@ r_p=fft(y_hat_p);
 
 H_estimated  = r_p./s_pilot;
 
-s_hat=r./(H_estimated);
+figure(3)
+freqz(H_estimated)
+title('Estimated H_2(w) - noise free')
 
+s_hat=r./(H_estimated);
 
 
 % H_estimated=zeros(N,1);

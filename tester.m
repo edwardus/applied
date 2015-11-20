@@ -7,9 +7,9 @@ s_maxTOT=zeros(1,1001);
 counter = 0;
 N=128;
 
-fall=1;
+fall=3;
 
-synch=10; %number of bits off-synch
+synch=2; %number of bits off-synch
 
 sigma=0;
 
@@ -22,7 +22,7 @@ counter = counter +1;
 
 [z,z_p,bits,symbols]=transmitter(fall,synch);
 
-[y_hat,y_hat_p,h,sigma2] = channel(z,z_p,1,sigma);
+[y_hat,y_hat_p,h,sigma2] = channel(z,z_p,2,sigma);
 
 [b_hat,s_hat] = receiver(y_hat,y_hat_p,h,fall,synch);
 
