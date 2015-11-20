@@ -1,4 +1,4 @@
-function [z,z_p,bits,symbols] = transmitter(fall)
+function [z,z_p,bits,symbols] = transmitter(fall,synch)
 
 %Transmitter file
 
@@ -7,7 +7,7 @@ N = 128;
 m= 2;
 z_p=[];
 QPSK = [-1-1i; -1+1i; 1-1i; 1+1i]./sqrt(2);
- s_pilot= QPSK(repmat([1:4],1,32));
+ s_pilot= QPSK(repmat(1,1,N));
 
 if fall == 1
 M=60; %Length of the cyclic prefix, i.e length of h1
@@ -34,7 +34,7 @@ title('Scatterplot of transmitted symbols')
 if fall == 3
 OFDM_p=ifft(s_pilot);
 Prefix_s=OFDM_p;
-z_p=[OFDM_p;OFDM_p]
+z_p=[zeros(synch,1);OFDM_p;OFDM_p];
 end
 
 OFDM = ifft(symbols); %We apply inverse-fft on our symbols (OFDM).
@@ -43,7 +43,8 @@ OFDM = ifft(symbols); %We apply inverse-fft on our symbols (OFDM).
 Prefix = OFDM((end-M+1):end); %Cyclic prefix: Gimics a infinite time-signal
                               %and works as a guard intervall.
                               
-z = [Prefix;OFDM]; % adds the prefix to the signal.
+
+z = [zeros(synch,1);Prefix;OFDM] % adds the prefix to the signal.
 
 % figure(1)
 % plot(real(z))

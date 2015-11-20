@@ -8,6 +8,9 @@ counter = 0;
 N=128;
 
 fall=1;
+
+synch=10; %number of bits off-synch
+
 sigma=0;
 
 %Test area
@@ -17,11 +20,11 @@ sigma=0;
 counter = counter +1; 
 
 
-[z,z_p,bits,symbols]=transmitter(fall);
+[z,z_p,bits,symbols]=transmitter(fall,synch);
 
 [y_hat,y_hat_p,h,sigma2] = channel(z,z_p,1,sigma);
 
-[b_hat,s_hat] = receiver(y_hat,y_hat_p,h,fall);
+[b_hat,s_hat] = receiver(y_hat,y_hat_p,h,fall,synch);
 
 s_max=max(abs(symbols-s_hat)); %This is a good measure, should be included 
                                %the report imo 
