@@ -18,7 +18,7 @@ counter = counter +1;
 [z,bits,symbols]=transmitter();
 
 [y_hat,h,sigma2] = channel(z,1,sigma);
-fall=1;
+fall=3;
 [b_hat,s_hat,H] = receiver(y_hat,h,fall);
 % s_max=max(abs(symbols-s_hat)); %This is a good measure, should be included 
                                %the report imo 
@@ -33,7 +33,7 @@ for i=1:2*N
 end
 %errorbits=abs(bits-b_hat)
 ErrorsPerSigma(counter) = BitErrors;
-s_maxTOT(counter)=s_max;
+%s_maxTOT(counter)=s_max;
 %%
 sigma = 0:0.001:1;
 % subplot(2,1,1)
