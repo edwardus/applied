@@ -2,7 +2,8 @@ function [y_hat,y_hat_p,h,sigma] = channel(z,z_p,mode,sigma)
 
 %% Filter through channel impulse response and add noise
 sigma; %Noise level
-N=128;
+N=130;
+synch=2; %number of bits off-synch
 y_hat_p=[];
     if mode==1
        
