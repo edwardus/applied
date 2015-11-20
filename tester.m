@@ -33,7 +33,7 @@ for i=1:2*N
 end
 %errorbits=abs(bits-b_hat)
 ErrorsPerSigma(counter) = BitErrors;
-s_maxTOT(counter)=s_max;
+%s_maxTOT(counter)=s_max;
 %%
 sigma = 0:0.001:1;
 % subplot(2,1,1)
