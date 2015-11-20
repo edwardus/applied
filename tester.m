@@ -13,13 +13,14 @@ sigma=0;
 
 
 counter = counter +1; 
+fall=3;
 
-
-[z,bits,symbols]=transmitter();
+[z,bits,symbols]=transmitter(fall);
 
 [y_hat,h,sigma2] = channel(z,1,sigma);
-fall=3;
-[b_hat,s_hat,H] = receiver(y_hat,h,fall);
+
+[b_hat,s_hat] = receiver(y_hat,h,fall);
+
 % s_max=max(abs(symbols-s_hat)); %This is a good measure, should be included 
                                %the report imo 
 

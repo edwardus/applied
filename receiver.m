@@ -1,4 +1,4 @@
-function [b_hat,s_hat,H] = receiver(y_hat,h,fall)
+function [b_hat,s_hat] = receiver(y_hat,h,fall)
 %% Parameters
 m=2;
 N=128;
@@ -38,6 +38,7 @@ if known ==0
 %% Parameters
 
 QPSK = [-1-1i; -1+1i; 1-1i; 1+1i]./sqrt(2);
+
 pilot= QPSK(repmat([1:4],1,4));
 z_len= (N + 16)*2
 M=length(y_hat)-z_len+1
@@ -57,6 +58,7 @@ end
 figure(3)
 freqz(H_estimated)
 s_hat=r./(conj(H_estimated))';
+
 
 b_hat=zeros(1,2*N);
 
