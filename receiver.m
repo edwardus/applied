@@ -1,14 +1,14 @@
-function [b_hat,s_hat] = receiver(y_hat,y_hat_p,h,fall,synch)
+function [b_hat,s_hat] = receiver(y_hat,y_hat_p,h,option,synch)
 %% Parameters
 m=2;
 N=128;
 known = 0;
-if fall==1
+if option==1
 M=60; %Make sure we use the same M in transmitter and receiver
 known = 1;
 end
 
-if fall==2
+if option==2
 M=9; %Make sure we use the same M in transmitter and receiver
 known = 1;
 end

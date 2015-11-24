@@ -7,7 +7,7 @@ s_maxTOT=zeros(1,101);
 counter = 0;
 N=128;
 
-fall=1;
+option=3;
 
 synch=0; %number of bits off-synch
 
@@ -15,19 +15,19 @@ sigma=0;
 
 %Test area
 
-for sigma = 0:0.001:1;
-    counter = counter +1; 
-    temp = zeros(1,100);
-    temp2 = zeros(1,100);
-for i=1:100
+% for sigma = 0:0.001:1;
+%     counter = counter +1; 
+%     temp = zeros(1,100);
+%     temp2 = zeros(1,100);
+% for i=1:100
 
 
 
-[z,z_p,bits,symbols]=transmitter(fall,synch);
+[z,z_p,bits,symbols]=transmitter(option,synch);
 
 [y_hat,y_hat_p,h,sigma2] = channel(z,z_p,1,sigma);
 
-[b_hat,s_hat] = receiver(y_hat,y_hat_p,h,fall,synch);
+[b_hat,s_hat] = receiver(y_hat,y_hat_p,h,option,synch);
 
 s_max=max(abs(symbols-s_hat)); %This is a good measure, should be included 
                                %the report imo 
@@ -40,15 +40,21 @@ for i=1:2*N
         BitErrors=BitErrors+1;
     end
 end
-temp(i) = BitErrors;
-temp2(i) = s_max;
+% temp(i) = BitErrors;
+% temp2(i) = s_max;
 
 
-end
-ErrorsPerSigma(counter)=mean(temp(1:end));
-s_maxTOT(counter)=mean(temp2(1:end));
-end
+% end
+% ErrorsPerSigma(counter)=mean(temp(1:end));
+% s_maxTOT(counter)=mean(temp2(1:end));
+% end
 
+
+disp(['The total number of bit errors are: ' int2str(BitErrors) char(10)...
+    'The current noise level is: ' num2str(sigma2) 'dB' char(10)...
+    'And the maximum differance between transmitted and received symbol is: ' num2str(s_max) char(10)])
+
+%%
 sigma = 0:0.001:1;
 subplot(2,1,1)
 plot(sigma,ErrorsPerSigma)

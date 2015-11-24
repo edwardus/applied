@@ -1,23 +1,26 @@
-function [z,z_p,bits,symbols] = transmitter(fall,synch)
+function [z,z_p,bits,symbols] = transmitter(option,synch)
 
 %Transmitter file
 
 %% Parameters
 N = 128;
 m= 2;
+fs = 22050;
+fc = 4000;
+
 z_p=[];
 QPSK = [-1-1i; -1+1i; 1-1i; 1+1i]./sqrt(2);
  s_pilot= QPSK(repmat(1,1,N));
 
-if fall == 1
+if option == 1
 M=60; %Length of the cyclic prefix, i.e length of h1
 end
-if fall == 2
+if option == 2
 M=9; %Length of the cyclic prefix, i.e length of h2
 end
-if fall == 3
+if option == 3 %This is used when the channel is unknown
 % M=N*2; %Length of the cyclic prefix, i.e length of hx
-M=N; %Detta är längden på det vi vill skicka (exklusive prefix)
+M=N; %This is the length of the packet we want to send (exclusive the prefix)
 end
 
 %% Script
@@ -31,7 +34,7 @@ symbols = QPSK(codeword); %Each number is assigned to our constellation.
 % figure(5)
 % scatterplot(symbols)
 % title('Scatterplot of transmitted symbols')
-if fall == 3
+if option == 3
 OFDM_p=ifft(s_pilot);
 Prefix_s=OFDM_p;
 z_p=[OFDM_p;OFDM_p;zeros(synch,1)];
@@ -44,10 +47,38 @@ Prefix = OFDM((end-M+1):end); %Cyclic prefix: Gimics a infinite time-signal
                               %and works as a guard intervall.
                               
 
-z = [Prefix;OFDM;zeros(synch,1)]; % adds the prefix to the signal.
+z = [Prefix;OFDM]; % adds the prefix to the signal.
 
-% figure(1)
-% plot(real(z))
-% title('Transmitted signal')
+% Works until here
+%%
+NN = 2^14; % Number of frequency grid points
+
+f = (0:NN-1)/NN;
+
+R=10;
+zu = zeros(length(z)*R,1);
+zu(1:R:end) = z;
+
+figure(24)
+plot(real(zu))
+semilogy(f,abs(fft(zu,NN))) % Check transform
+xlabel('normalized frequency f/fs');
+
+
+%%
+
+B = firpm(32,2*[0 0.5/R*0.9 0.5/R*1.6 1/2],[1 1 0 0]);
+
+zi = conv(zu,B);
+
+n = ((1:length(zi))/fs).';
+
+zmr = real(zi.*exp(1i*2*pi*fc*n));
+ 
+
+zmr = zmr/max(zmr);
+
+sound(zmr,fs)
+
 end
 
