@@ -46,7 +46,7 @@ QPSK = [-1-1i; -1+1i; 1-1i; 1+1i]./sqrt(2);
 
 s_pilot = QPSK(repmat(1,1,128));
 z_len= N*2+synch;
-M=length(y_hat)-z_len+1
+M=length(y_hat)-z_len+1;
 %% Processing
 y_hat = y_hat(M+1:M+N); % removal of the cyclic prefix
 y_hat_p = y_hat_p(M+1:M+N);
@@ -57,9 +57,9 @@ r_p=fft(y_hat_p);
 
 H_estimated  = r_p./s_pilot;
 
-figure(3)
-freqz(H_estimated)
-title('Estimated H_2(w) - noise free')
+% figure(3)
+% freqz(H_estimated)
+% title('Estimated H_1(w) - noise free')
 
 s_hat=r./(H_estimated);
 

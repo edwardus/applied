@@ -34,7 +34,7 @@ symbols = QPSK(codeword); %Each number is assigned to our constellation.
 if fall == 3
 OFDM_p=ifft(s_pilot);
 Prefix_s=OFDM_p;
-z_p=[zeros(synch,1);OFDM_p;OFDM_p];
+z_p=[OFDM_p;OFDM_p;zeros(synch,1)];
 end
 
 OFDM = ifft(symbols); %We apply inverse-fft on our symbols (OFDM).
@@ -44,7 +44,7 @@ Prefix = OFDM((end-M+1):end); %Cyclic prefix: Gimics a infinite time-signal
                               %and works as a guard intervall.
                               
 
-z = [zeros(synch,1);Prefix;OFDM] % adds the prefix to the signal.
+z = [Prefix;OFDM;zeros(synch,1)]; % adds the prefix to the signal.
 
 % figure(1)
 % plot(real(z))

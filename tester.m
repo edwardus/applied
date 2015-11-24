@@ -2,27 +2,30 @@
 %% Test File
 
 %Parameters
-ErrorsPerSigma = zeros(1,1001);
-s_maxTOT=zeros(1,1001);
+ErrorsPerSigma = zeros(1,101);
+s_maxTOT=zeros(1,101);
 counter = 0;
 N=128;
 
-fall=3;
+fall=1;
 
-synch=2; %number of bits off-synch
+synch=0; %number of bits off-synch
 
 sigma=0;
 
 %Test area
 
-% for sigma = 0:0.001:1;
+for sigma = 0:0.001:1;
+    counter = counter +1; 
+    temp = zeros(1,100);
+    temp2 = zeros(1,100);
+for i=1:100
 
-counter = counter +1; 
 
 
 [z,z_p,bits,symbols]=transmitter(fall,synch);
 
-[y_hat,y_hat_p,h,sigma2] = channel(z,z_p,2,sigma);
+[y_hat,y_hat_p,h,sigma2] = channel(z,z_p,1,sigma);
 
 [b_hat,s_hat] = receiver(y_hat,y_hat_p,h,fall,synch);
 
@@ -37,28 +40,31 @@ for i=1:2*N
         BitErrors=BitErrors+1;
     end
 end
-
-ErrorsPerSigma(counter) = BitErrors;
-s_maxTOT(counter)=s_max;
-% end
+temp(i) = BitErrors;
+temp2(i) = s_max;
 
 
-% sigma = 0:0.001:1;
-% subplot(2,1,1)
-% plot(sigma,ErrorsPerSigma)
-% legend('Bit errors')
-% title('Bit errors vs Sigma (h_1 known to receiver)')
-% xlabel('Noise level')
-% ylabel('Bit errors')
-% xlim([0 0.1])
-% set(gca, 'fontsize',20)
-% subplot(2,1,2)
-% plot(sigma,s_maxTOT,'k*')
-% legend('Distance of ideal and estimated symbols')
-% xlabel('Noise level')
-% ylabel('Distance')
-% xlim([0 0.1])
-% set(gca, 'fontsize',20)
+end
+ErrorsPerSigma(counter)=mean(temp(1:end));
+s_maxTOT(counter)=mean(temp2(1:end));
+end
+
+sigma = 0:0.001:1;
+subplot(2,1,1)
+plot(sigma,ErrorsPerSigma)
+legend('Bit errors')
+title('Bit errors vs Sigma (h_1 known to receiver)')
+xlabel('Noise level')
+ylabel('Bit errors')
+xlim([0 0.1])
+set(gca, 'fontsize',20)
+subplot(2,1,2)
+plot(sigma,s_maxTOT,'k*')
+legend('Distance of ideal and estimated symbols')
+xlabel('Noise level')
+ylabel('Distance')
+xlim([0 0.1])
+set(gca, 'fontsize',20)
 
 
 
