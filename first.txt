@@ -1,0 +1,8 @@
+*We need to get the second h(t) working. Currently it is generating errors. 
+
+*We need to try a noisy channel. I'm not sure what normal noise levels are (dB), but it seems that why are very noise sensitive (too?). 
+
+*We need to generate correct plots (which we are not atm). 
+
+
+testing :D
