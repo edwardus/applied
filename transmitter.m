@@ -1,4 +1,4 @@
-function [z,z_p,bits,symbols] = transmitter(option,synch)
+function [zmr,z_p,bits,symbols] = transmitter(option)
 
 %Transmitter file
 
@@ -20,7 +20,7 @@ M=9; %Length of the cyclic prefix, i.e length of h2
 end
 if option == 3 %This is used when the channel is unknown
 % M=N*2; %Length of the cyclic prefix, i.e length of hx
-M=N; %This is the length of the packet we want to send (exclusive the prefix)
+M=80; %This is the length of the packet we want to send (exclusive the prefix)
 end
 
 %% Script
@@ -36,8 +36,8 @@ symbols = QPSK(codeword); %Each number is assigned to our constellation.
 % title('Scatterplot of transmitted symbols')
 if option == 3
 OFDM_p=ifft(s_pilot);
-Prefix_s=OFDM_p;
-z_p=[OFDM_p;OFDM_p;zeros(synch,1)];
+Prefix_p = OFDM_p((end-M+1):end);
+
 end
 
 OFDM = ifft(symbols); %We apply inverse-fft on our symbols (OFDM).
@@ -47,7 +47,29 @@ Prefix = OFDM((end-M+1):end); %Cyclic prefix: Gimics a infinite time-signal
                               %and works as a guard intervall.
                               
 
-z = [Prefix;OFDM]; % adds the prefix to the signal.
+z = [Prefix_p;OFDM_p;Prefix;OFDM]; % adds the prefix to the signal.
+% 
+% figure(83)
+% plot(real(z))
+% 
+% Fs=2205;
+% % 
+% Y = fft(z);
+% L=length(z);
+% P2 = abs(Y/L);
+% P1 = P2(1:L/2+1);
+% P1(2:end-1) = 2*P1(2:end-1);
+% 
+% f = Fs*(0:(L)/2)/L;
+% figure(9)
+% plot(f,P1)
+% title('Single-Sided Amplitude Spectrum of Z')
+% xlabel('f (Hz)')
+% ylabel('|z(f)|')
+% xlim([0 13000])
+% 
+% 
+
 
 % Works until here
 %%
@@ -55,21 +77,21 @@ NN = 2^14; % Number of frequency grid points
 
 f = (0:NN-1)/NN;
 
-R=10;
+R=5;
 zu = zeros(length(z)*R,1);
 zu(1:R:end) = z;
 
-figure(24)
-plot(real(zu))
-semilogy(f,abs(fft(zu,NN))) % Check transform
-xlabel('normalized frequency f/fs');
+% figure(24)
+% plot(real(zu))
+% semilogy(f,abs(fft(zu,NN))) % Check transform
+% xlabel('normalized frequency f/fs');
 
 
 %%
 
 B = firpm(32,2*[0 0.5/R*0.9 0.5/R*1.6 1/2],[1 1 0 0]);
 
-zi = conv(zu,B);
+zi = filter(1,B,zu);
 
 n = ((1:length(zi))/fs).';
 

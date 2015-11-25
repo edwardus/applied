@@ -21,19 +21,21 @@ sigma=0;
 %     temp2 = zeros(1,100);
 % for i=1:100
 
+sigma2=0;
+
+[z,z_p,bits,symbols]=transmitter(option);
+
+% [y_hat,y_hat_p,h,sigma2] = channel(z,z_p,1,sigma);
+ y_hat = simulate_audio_channel(z,sigma);
 
 
-[z,z_p,bits,symbols]=transmitter(option,synch);
-
-[y_hat,y_hat_p,h,sigma2] = channel(z,z_p,1,sigma);
-
-[b_hat,s_hat] = receiver(y_hat,y_hat_p,h,option,synch);
+[b_hat,s_hat] = receiver(y_hat,[],[],option,synch);
 
 s_max=max(abs(symbols-s_hat)); %This is a good measure, should be included 
                                %the report imo 
 
 %scatterplot(s_hat)
-    
+
 BitErrors = 0;
 for i=1:2*N
     if bits(i)~=b_hat(i)
