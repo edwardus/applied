@@ -10,7 +10,7 @@ fc = 4000;
 
 z_p=[];
 QPSK = [-1-1i; -1+1i; 1-1i; 1+1i]./sqrt(2); 
- s_pilot= QPSK(repmat(1,1,N))
+ s_pilot= QPSK(repmat(1,1,N));
  %% testing
 %  bits_p = randsrc(1,2*N,[1 0]);
 %  
@@ -34,7 +34,7 @@ M=80; %This is the length of the packet we want to send (exclusive the prefix)
 end
 
 %% Script
-bits = randsrc(1,2*N,[0 1]); %Random source of bits (length 2*N).
+bits = randsrc(1,2*N,[1 0]); %Random source of bits (length 2*N).
 
 GroupBits = buffer(bits,m)'; %Here we group the bits 2 and 2.
 
@@ -58,7 +58,8 @@ Prefix = OFDM((end-M+1):end); %Cyclic prefix: Gimics a infinite time-signal
                               
 
 z = [Prefix_p;OFDM_p;Prefix;OFDM]; % adds the prefix to the signal.
-% 
+
+
 % figure(83)
 % plot(real(z))
 % 
@@ -83,12 +84,13 @@ z = [Prefix_p;OFDM_p;Prefix;OFDM]; % adds the prefix to the signal.
 
 % Works until here
 %%
-NN = 2^14; % Number of frequency grid points
-f = (0:NN-1)/NN;
 
-R=5;
-zu = zeros(length(z)*R,1);
-zu(1:R:end) = z;
+zu=upsample(z,10)
+
+R=10;
+% zu = zeros(length(z)*R,1);
+% zu(1:R:end) = z;
+
 
 % figure(24)
 % plot(real(zu))
@@ -109,7 +111,7 @@ zmr = real(zi.*exp(1i*2*pi*fc*n));
 
 zmr = zmr/max(zmr);
 
-
+% zmr=zupmr2;
 sound(zmr,fs)
 
 end
