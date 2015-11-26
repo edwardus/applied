@@ -11,7 +11,7 @@ option=3;
 
 synch=0; %number of bits off-synch
 
-sigma=0;
+sigma=0.13;
 
 %Test area
 

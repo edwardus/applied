@@ -37,27 +37,28 @@ if known ==0
     
     h_len=length(y_hat)-z_len_up+1;
 %     M=h_len;
-
+%     y_hat = y_hat(1:end-h_len+1);
 %% Demodulation
 fs = 22050;
 fc = 4000;
-figure(8); plot(y_hat)
+
 
  [~,index_start] = max(y_hat);
  
-  index_start = index_start + N -1;
+  index_start = index_start;
   
-  figure(10); plot(y_hat(index_start:end))
-
-
-   y_hat = y_hat(1:end-h_len+1);
-
+     figure(10); plot(y_hat(index_start-25:end))
+    
+   y_hat = y_hat(index_start-25:index_start+(M+2*N+1)*R);
+figure(30); plot(y_hat)
+    length(y_hat)
+%    y_hat = y_hat(1:end-h_len+1);
 
 
 n = ((0:length(y_hat)-1)/fs).';
-figure(2); plot(y_hat)
+
 y_hat = y_hat.*exp(-1i*2*pi*fc*n);
- figure(3); plot(fft(y_hat))
+
 %% Design a LP decimation filter (Decimation)
 B = firpm(32,2*[0 0.5/R*0.9 0.5/R*1.6 1/2],[1 1 0 0]);
 y_hat = filter(B,1,y_hat);
@@ -67,15 +68,14 @@ y_hat = filter(B,1,y_hat);
 
 D = 10; %D = R
 y_hat = y_hat(1:D:end);
-  figure(4);  plot(y_hat)
+
 %% Processing
     
     
+    y_hat_p = y_hat(1:N);
     
-    y_hat_p = y_hat(M+1:M+N);
-    
-    y_hat = y_hat(M+N+1+M:M+2*N+M); % removal of the cyclic prefix
-    
+    y_hat = y_hat(N+M+1:N+M+N); % removal of the cyclic prefix
+    length(y_hat)
     r=fft(y_hat); %length N
     r_p=fft(y_hat_p);
     
