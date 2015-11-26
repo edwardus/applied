@@ -1,4 +1,4 @@
-function [y_hat,y_hat_p,h,sigma] = channel(z,z_p,mode,sigma)
+function [y_hat,y_hat_p,sigma] = channel(z,mode,sigma)
 
 %% Filter through channel impulse response and add noise
 
@@ -32,9 +32,9 @@ w = 1/sqrt(2)*sigma*(randn(y_len,1) + 1i*randn(y_len,1)); %Additive noise
 w2 = 1/sqrt(2)*sigma*(randn(y_len,1) + 1i*randn(y_len,1));
 
 y_hat=conv(z,h)+w;
-if length(z_p)>1;
-    y_hat_p=conv(z_p,h)+w2;
-end
+% if length(z_p)>1;
+%     y_hat_p=conv(z_p,h)+w2;
+% end
 % figure(1)
 % freqz(fft(h,N))
 % title('Actual H_1(w)')

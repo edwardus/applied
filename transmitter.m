@@ -9,9 +9,19 @@ fs = 22050;
 fc = 4000;
 
 z_p=[];
-QPSK = [-1-1i; -1+1i; 1-1i; 1+1i]./sqrt(2);
- s_pilot= QPSK(repmat(1,1,N));
-
+QPSK = [-1-1i; -1+1i; 1-1i; 1+1i]./sqrt(2); 
+ s_pilot= QPSK(repmat(1,1,N))
+ %% testing
+%  bits_p = randsrc(1,2*N,[1 0]);
+%  
+% GroupBits_p = buffer(bits_p,m)'; %Here we group the bits 2 and 2.
+% 
+% codeword_p = bi2de(GroupBits_p,'left-msb')+1; %Assign each "group" to a decimal.
+% 
+% s_pilot = QPSK(codeword_p); %Each number is assigned to our constellation.
+ 
+ %%
+ 
 if option == 1
 M=60; %Length of the cyclic prefix, i.e length of h1
 end
@@ -24,7 +34,7 @@ M=80; %This is the length of the packet we want to send (exclusive the prefix)
 end
 
 %% Script
-bits = randsrc(1,2*N,[1 0]); %Random source of bits (length 2*N).
+bits = randsrc(1,2*N,[0 1]); %Random source of bits (length 2*N).
 
 GroupBits = buffer(bits,m)'; %Here we group the bits 2 and 2.
 
@@ -74,7 +84,6 @@ z = [Prefix_p;OFDM_p;Prefix;OFDM]; % adds the prefix to the signal.
 % Works until here
 %%
 NN = 2^14; % Number of frequency grid points
-
 f = (0:NN-1)/NN;
 
 R=5;
@@ -91,14 +100,15 @@ zu(1:R:end) = z;
 
 B = firpm(32,2*[0 0.5/R*0.9 0.5/R*1.6 1/2],[1 1 0 0]);
 
-zi = filter(1,B,zu);
+zi = filter(B,1,zu);
 
-n = ((1:length(zi))/fs).';
+n = ((0:length(zi)-1)/fs).';
 
 zmr = real(zi.*exp(1i*2*pi*fc*n));
  
 
 zmr = zmr/max(zmr);
+
 
 sound(zmr,fs)
 

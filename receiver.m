@@ -1,11 +1,11 @@
-function [b_hat,s_hat] = receiver(y_hat,y_hat_p,h,option,synch)
+function [b_hat,s_hat] = receiver(y_hat,option,synch)
 %% Parameters
 m=2;
 N=128;
 known = 0;
 M=80;
 R=5;
-
+y_hat
 if option==1
     h_len=60; %Make sure we use the same M in transmitter and receiver
     known = 1;
@@ -43,29 +43,30 @@ if known ==1
 end
 
 if known ==0
-    %% Parameters
+    % Parameters
     h=0;
     QPSK = [-1-1i; -1+1i; 1-1i; 1+1i]./sqrt(2);
     
-    s_pilot = QPSK(repmat(1,1,128));
+    s_pilot= QPSK(repmat(1,1,N));
     z_len= (N*2+160)+synch;
     h_len=length(y_hat)-z_len+1;
     
     z_len_up = z_len *R;
     
-%% Demodulation
+%% Demodulationq
 fs = 22050;
 fc = 4000;
 NN=2^14;
+
 F = (0:NN-1)/NN*fs;
 
-n = ((1:length(y_hat))/fs).';
+n = ((0:length(y_hat)-1)/fs).';
 
 y_hat = y_hat.*exp(-1i*2*pi*fc*n);
 
 %% Design a LP decimation filter (Decimation)
 B = firpm(32,2*[0 0.5/R*0.9 0.5/R*1.6 1/2],[1 1 0 0]);
-y_hat = filter(1,B,y_hat);
+y_hat = filter(B,1,y_hat);
 
 %% Down-sampling
 D = 5; %D = R

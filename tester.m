@@ -25,11 +25,10 @@ sigma2=0;
 
 [z,z_p,bits,symbols]=transmitter(option);
 
-% [y_hat,y_hat_p,h,sigma2] = channel(z,z_p,1,sigma);
- y_hat = simulate_audio_channel(z,sigma);
+[y_hat,y_hat_p,sigma2] = channel(z,1,sigma);
+%  y_hat = simulate_audio_channel(z,sigma);
 
-
-[b_hat,s_hat] = receiver(y_hat,[],[],option,synch);
+[b_hat,s_hat] = receiver(y_hat,option,synch);
 
 s_max=max(abs(symbols-s_hat)); %This is a good measure, should be included 
                                %the report imo 
