@@ -1,4 +1,4 @@
-function b_hat = KnownChannel(y_hat)
+function b_hat = KnownChannel(y_hat,h_len)
 
 %% Processing
 m=2;

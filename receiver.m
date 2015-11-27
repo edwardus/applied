@@ -1,106 +1,108 @@
-function [b_hat,s_hat] = receiver(y_hat,option,synch)
-%% Parameters
-m=2;
-N=128;
-known = 0;
-M=80;
-R=10;
+function [b_hat,s_hat] = receiver(y_rec,option,synch)
+%{
+Receives the signal after passing through the channel. Runs an energy
+algorithm to detect the desired data. Thereafter the data is converted
+back to baseband, sent through a decimation-filter, down-sampled.
+Inverse-OFDM and equalization is used to estimate the transmitted symbols.
+Lastly the symbols are converted back to bits.
 
+Input: y_rec - The received signal.
 
-if option==1
-    h_len=60; %Make sure we use the same M in transmitter and receiver
-    known = 1;
-end
+       option - Flag parameter that can take three different values (1,2,3)
+                for (1) and (2) the channel is known and the impusle
+                response h1 and h2 is used respectively. 
+                For (3) the channel is assumed to be unknown, and a pilot
+                is therefore used to estimate the transfer function. 
+       
+       synch - Simulates a syncronization error.
 
-if option==2
-    h_len=9; %Make sure we use the same M in transmitter and receiver
-    known = 1;
-end
-
-if known ==1
-    
-    b_hat = KnownChannel(y_hat);
-    
-    return;
-end
-
-if known ==0
-%% Parameters
-    
-    QPSK = [-1-1i; -1+1i; 1-1i; 1+1i]./sqrt(2);
-    
-    s_pilot= QPSK(repmat(1,1,N));
-   
-    z_len= (N*2+160)+synch;
-
-    z_len_up = z_len *R;
-    
-    h_len=length(y_hat)-z_len_up+1;
-%     M=h_len;
-%     y_hat = y_hat(1:end-h_len+1);
-%% Demodulation
-fs = 22050;
-fc = 4000;
-
-
- [~,index_start] = max(y_hat);
+Outputs: b_hat - The estimated bits. These are used for calculating the
+                 BER.
  
-  index_start = index_start;
-  
-     figure(10); plot(y_hat(index_start-25:end))
+         s_hat - The estimated symbols. Used to calculate the maximum
+                 distance to the transmitted ideal symbols. 
+                                                                    %}
+
+
+%% Parameters
+N = 128;
+M = 80; %Length of prefix
+R = 10; %Upsamplings-factor
+D = 10; %Downsampling-factor
+
+if option == 1
+    h_len = 60; %Known length of impulse response
+    b_hat = KnownChannel(y_rec,h_len); %Initiates a seperate and shorter
+                                       %script for a known channel
+    return;
     
-   y_hat = y_hat(index_start-25:index_start+(M+2*N+1)*R);
-figure(30); plot(y_hat)
-    length(y_hat)
-%    y_hat = y_hat(1:end-h_len+1);
+    
+elseif option == 2
+    h_len = 9; %Known length of impulse response
+    b_hat = KnownChannel(y_rec,h_len); %Initiates a seperate and shorter
+                                       %script for a known channel
+    return;
+    
+else
+%% Parameters
+    
+QPSK = [-1-1i; -1+1i; 1-1i; 1+1i]./sqrt(2);
+s_pilot = QPSK(ones(1,N)); %The same pilot as have been transmitted
+z_len = (N*2+160)+synch; %The length of the desired signal
+z_len_up = z_len *R; %The length of the upsampled desired signal
+h_len = length(y_rec)-z_len_up+1; %Length of the unknown impulse response
+fs = 22050; %Sample frequency 
+fc = 4000; %Carrier frequency
+    
+%% Detection algorithm (Energy based)
+
+[~,index_start] = max(y_rec); %The index of the maximum peak
+ 
+y_rec = y_rec(index_start-25:index_start+(M+2*N+1)*R); %The elements of 
+                                                       %interest
+
+% figure(3); plot(y_hat)
+% title('shows our windowed signal')
 
 
-n = ((0:length(y_hat)-1)/fs).';
+%% Demodulation
 
-y_hat = y_hat.*exp(-1i*2*pi*fc*n);
+n = ((0:length(y_rec)-1)/fs).';
 
-%% Design a LP decimation filter (Decimation)
-B = firpm(32,2*[0 0.5/R*0.9 0.5/R*1.6 1/2],[1 1 0 0]);
-y_hat = filter(B,1,y_hat);
+y_base = y_rec.*exp(-1i*2*pi*fc*n); %The signal is converted back to
+                                   %baseband
+
+%% Decimation
+
+B = firpm(32,2*[0 0.5/R*0.9 0.5/R*1.6 1/2],... %Lowpass-decimation filter, 
+    [1 1 0 0]);                                %guards against aliasing
+                                               %(when downsampling)
+                                                       
+y_dec = filter(B,1,y_base);
 
 %% Down-sampling
 
+y = downsample(y_dec,D); %The signal is down-sampled with a factor of 10
 
-D = 10; %D = R
-y_hat = y_hat(1:D:end);
+%% Inverse-OFDM
+    
+y_pilot = y(1:N); %Received pilot
+    
+y = y(N+M+1:N+M+N); % removal of the cyclic prefixes
+    
+r = fft(y); %length N
+r_pilot = fft(y_pilot);
 
-%% Processing
+%% Equalizer
     
-    
-    y_hat_p = y_hat(1:N);
-    
-    y_hat = y_hat(N+M+1:N+M+N); % removal of the cyclic prefix
-    length(y_hat)
-    r=fft(y_hat); %length N
-    r_p=fft(y_hat_p);
-    
-    
-    H_estimated  = r_p./s_pilot; %length N
-    
-    % figure(3)
-    % freqz(H_estimated)
-    % title('Estimated H_1(w) - noise free')
-    
-    s_hat=r./(H_estimated);
-  
-    
-    
-    % H_estimated=zeros(N,1);
-    %
-    % for i=1:8
-    %     H_estimated([(i-1)*16+1:(i-1)*16+16])=r([(i-1)*16+1:(i-1)*16+16])./pilot;
-    %     pilot=r([(i)*16+1:(i)*16+16])./H_estimated([(i-1)*16+1:(i-1)*16+16]);
-    % end
-    % figure(3)
-    % freqz(H_estimated)
-    % title('Estimated H_1(w) - noisy channel')
-    
-    b_hat=zeros(1,2*N);
+H_estimated  = r_pilot./s_pilot; %The channel is estimated using the 
+                                 %received pilot and known pilot (length N)
+
+s_hat=r./(H_estimated); %Estimated symbols
+ 
+%% Inverse-QPSK
+
+b_hat=zeros(1,2*N); %Temp vector
     
     for n=1:N
         b_hat((n*2-1))=sign(real(s_hat(n)));
@@ -110,8 +112,11 @@ y_hat = y_hat(1:D:end);
     b_hat(b_hat==0)=3; %just for debugging
     b_hat(b_hat==-1)=0; %replace the -1 values
 end
-
 end
+
+%% Code for plots
+
+
 
     
 

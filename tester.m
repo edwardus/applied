@@ -11,7 +11,7 @@ option=3;
 
 synch=0; %number of bits off-synch
 
-sigma=0.13;
+sigma=0.01;
 
 %Test area
 
@@ -23,10 +23,10 @@ sigma=0.13;
 
 sigma2=0;
 
-[z,z_p,bits,symbols]=transmitter(option);
+[z_mr,bits,symbols]=transmitter(option);
 
 % [y_hat,y_hat_p,sigma2] = channel(z,1,sigma);
- y_hat = simulate_audio_channel(z,sigma);
+ y_hat = simulate_audio_channel(z_mr,sigma);
  
 [b_hat,s_hat] = receiver(y_hat,option,synch);
 
@@ -78,6 +78,5 @@ set(gca, 'fontsize',20)
 disp(['The total number of bit errors are: ' int2str(BitErrors) char(10)...
     'The current noise level is: ' num2str(sigma2) 'dB' char(10)...
     'And the maximum differance between transmitted and received symbol is: ' num2str(s_max) char(10)])
-
 
 
